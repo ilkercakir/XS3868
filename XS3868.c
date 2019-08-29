@@ -211,6 +211,17 @@ node* q_remove(messagequeue *q)
 	return p;
 }
 
+qstatus q_status(messagequeue *q)
+{
+	qstatus stat;
+
+	pthread_mutex_lock(&(q->qmutex));
+	stat = q->status;
+	pthread_mutex_unlock(&(q->qmutex));
+
+	return(stat);
+}
+
 void q_signalstop(messagequeue *q)
 {
 	pthread_mutex_lock(&(q->qmutex));
@@ -240,22 +251,26 @@ static gpointer read_indication_thread(gpointer args)
 	int i;
 	char *s;
 
-	strcpy(indication.txrx, "RX"); 
-	while ((s=fgets(&(indication.code[0]), msglength, c->f)))
+	if (c->f)
 	{
-		i = strlen(s);
-		printf("read_indication_thread : %s length:%d\n", s, i);
-		if (i<=1) // <newline>
+		strcpy(indication.txrx, "RX"); 
+		while ((s=fgets(&(indication.code[0]), msglength, c->f)))
 		{
-		}
-		else // msg<newline>
-		{
-			s[i-1] = '\0';
-			strcpy(indication.parm, s+2);
-			indication.code[2] = '\0';
-			indication.desc[0] = '\0';
-			printf("adding %s-%s\n", indication.code, indication.parm);
-			q_add(&(c->rq), &indication);
+			i = strlen(s);
+//printf("read_indication_thread : %s length:%d\n", s, i);
+			if (i<=1) // <newline>
+			{
+			}
+			else // msg<newline>
+			{
+				s[i-1] = '\0';
+				strcpy(indication.parm, s+2);
+				indication.code[2] = '\0';
+				indication.desc[0] = '\0';
+//printf("adding %s-%s\n", indication.code, indication.parm);
+				q_add(&(c->rq), &indication);
+			}
+			if (q_status(&(c->rq))==IDLE) break;
 		}
 	}
 
@@ -263,12 +278,212 @@ static gpointer read_indication_thread(gpointer args)
 	pthread_exit(&(c->rret[0]));
 }
 
+void command_description(token *q)
+{
+	if (!strcmp(q->code, "CA"))
+		strcpy(q->desc, "Enter pairing mode, discoverable for 2 min.");
+	else if (!strcmp(q->code, "CB"))
+		strcpy(q->desc, "Exit pairing, can not be found by peers");
+	else if (!strcmp(q->code, "CC"))
+		strcpy(q->desc, "Connect to last successfully connected remote device");
+	else if (!strcmp(q->code, "CD"))
+		strcpy(q->desc, "Disconnect from remote device");
+	else if (!strcmp(q->code, "CE"))
+		strcpy(q->desc, "Answer call");
+	else if (!strcmp(q->code, "CF"))
+		strcpy(q->desc, "Reject call");
+	else if (!strcmp(q->code, "CG"))
+		strcpy(q->desc, "End call");
+	else if (!strcmp(q->code, "CH"))
+		strcpy(q->desc, "Redial");
+	else if (!strcmp(q->code, "CI"))
+		strcpy(q->desc, "Voice dial");
+	else if (!strcmp(q->code, "CJ"))
+		strcpy(q->desc, "Cancel voice dial");
+	else if (!strcmp(q->code, "CM"))
+		strcpy(q->desc, "Mute/unmute microphone");
+	else if (!strcmp(q->code, "CO"))
+		strcpy(q->desc, "Transfer call to/from handset");
+	else if (!strcmp(q->code, "CQ"))
+		strcpy(q->desc, "Release held call, Reject waiting call");
+	else if (!strcmp(q->code, "CR"))
+		strcpy(q->desc, "Release active call, Accept other call");
+	else if (!strcmp(q->code, "CS"))
+		strcpy(q->desc, "Hold active call, Accept other call");
+	else if (!strcmp(q->code, "CT"))
+		strcpy(q->desc, "Conference call");
+	else if (!strcmp(q->code, "CW"))
+		sprintf(q->desc, "Dial %s", q->parm);
+	else if (!strcmp(q->code, "CX"))
+		sprintf(q->desc, "Send DTMF %s", q->parm);
+	else if (!strcmp(q->code, "CY"))
+		strcpy(q->desc, "Query HFP Status");
+	else if (!strcmp(q->code, "CZ"))
+		strcpy(q->desc, "Reset");
+	else if (!strcmp(q->code, "MA"))
+		strcpy(q->desc, "Play/Pause music");
+	else if (!strcmp(q->code, "MC"))
+		strcpy(q->desc, "Stop music");
+	else if (!strcmp(q->code, "MD"))
+		strcpy(q->desc, "Forward music");
+	else if (!strcmp(q->code, "ME"))
+		strcpy(q->desc, "Backward music");
+	else if (!strcmp(q->code, "MF"))
+		strcpy(q->desc, "Query Auto Answer and PowerOn Auto Connection");
+	else if (!strcmp(q->code, "MG"))
+		strcpy(q->desc, "Enable PowerOn Auto Connection");
+	else if (!strcmp(q->code, "MH"))
+		strcpy(q->desc, "Disable PowerOn Auto Connection");
+	else if (!strcmp(q->code, "MI"))
+		strcpy(q->desc, "Connect to AV Source");
+	else if (!strcmp(q->code, "MJ"))
+		strcpy(q->desc, "Disconnect from AV Source");
+	else if (!strcmp(q->code, "MO"))
+		strcpy(q->desc, "Query AVRCP Status");
+	else if (!strcmp(q->code, "MP"))
+		strcpy(q->desc, "Enable Auto Answer");
+	else if (!strcmp(q->code, "MQ"))
+		strcpy(q->desc, "Disable Auto Answer");
+	else if (!strcmp(q->code, "MR"))
+		strcpy(q->desc, "Fast Forward");
+	else if (!strcmp(q->code, "MS"))
+		strcpy(q->desc, "Fast Rewind");
+	else if (!strcmp(q->code, "MT"))
+		strcpy(q->desc, "Stop Fast Forward/Rewind");
+	else if (!strcmp(q->code, "MV"))
+		strcpy(q->desc, "Query A2DP status");
+	else if (!strcmp(q->code, "MZ"))
+		strcpy(q->desc, "Switch two remote devices");
+	else if (!strcmp(q->code, "VD"))
+		strcpy(q->desc, "Volume down");
+	else if (!strcmp(q->code, "VI"))
+		strcpy(q->desc, "Start Inquiry");
+	else if (!strcmp(q->code, "VJ"))
+		strcpy(q->desc, "Cancel Inquiry");
+	else if (!strcmp(q->code, "VU"))
+		strcpy(q->desc, "Volume up");
+	else if (!strcmp(q->code, "VX"))
+		strcpy(q->desc, "Power off OOL");
+}
+
 void indicator_description(token *q)
 {
+	int i;
+	char *s;
+
 	if (!strcmp(q->code, "II"))
-		strcpy(q->desc, "In pairing state");
+		strcpy(q->desc, "Enter pairing state");
 	else if (!strcmp(q->code, "IJ"))
-		strcpy(q->desc, "Exit pairing state");
+		sprintf(q->desc, "Exit pairing mode and enter listening, %s", q->parm);
+	else if (!strcmp(q->code, "IV"))
+		strcpy(q->desc, "Connected");
+	else if (!strcmp(q->code, "IA"))
+		strcpy(q->desc, "Disconnected");
+	else if (!strcmp(q->code, "IC"))
+		strcpy(q->desc, "Outgoing call");
+	else if (!strcmp(q->code, "IF"))
+		strcpy(q->desc, "Hang up");
+	else if (!strcmp(q->code, "IG"))
+		strcpy(q->desc, "Pick up");
+	else if (!strcmp(q->code, "IL"))
+		strcpy(q->desc, "Held active call, Accepted other call");
+	else if (!strcmp(q->code, "IM"))
+		strcpy(q->desc, "In conference");
+	else if (!strcmp(q->code, "IN"))
+		strcpy(q->desc, "Released held call, Rejected waiting call");
+	else if (!strcmp(q->code, "IP"))
+		sprintf(q->desc, "Phone number length %s", q->parm);
+	else if (!strcmp(q->code, "IS"))
+		sprintf(q->desc, "Power on init complete, version %s", q->parm);
+	else if (!strcmp(q->code, "IT"))
+		strcpy(q->desc, "Released active call, Accepted other call");
+	else if (!strcmp(q->code, "IR"))
+		sprintf(q->desc, "Phone number %s", q->parm);
+	else if (!strcmp(q->code, "PE"))
+		strcpy(q->desc, "Voice dial start");
+	else if (!strcmp(q->code, "PF"))
+		strcpy(q->desc, "Voice dial stop");
+	else if (!strcmp(q->code, "OK"))
+		strcpy(q->desc, "Command accepted");
+	else if (!strcmp(q->code, "SW"))
+		strcpy(q->desc, "Switch command accepted");
+	else if (!strcmp(q->code, "MA"))
+		strcpy(q->desc, "AV paused/stopped");
+	else if (!strcmp(q->code, "MB"))
+		strcpy(q->desc, "AV playing");
+	else if (!strcmp(q->code, "MC"))
+		strcpy(q->desc, "HFP audio connected");
+	else if (!strcmp(q->code, "MD"))
+		strcpy(q->desc, "HFP audio disconnected");
+	else if (!strcmp(q->code, "MF"))
+		sprintf(q->desc, "Auto Answer, Auto Connect <%s>", q->parm);
+	else if (!strcmp(q->code, "MG"))
+	{
+		i = atoi(q->parm);
+		switch(i)
+		{
+			case 1: s="Ready (to be connected)"; break;
+			case 2: s="Connecting"; break;
+			case 3: s="Connected"; break;
+			case 4: s="Outgoing call"; break;
+			case 5: s="Incoming call"; break;
+			case 6: s="Ongoing call"; break;
+			case default: s="Unknown"; break;
+		}
+		sprintf(q->desc, "HFP Status %s, %s", q->parm, s);
+	}
+	else if (!strcmp(q->code, "ML"))
+	{
+		i = atoi(q->parm);
+		switch(i)
+		{
+			case 1: s="Ready (to be connected)"; break;
+			case 2: s="Connecting"; break;
+			case 3: s="Connected"; break;
+			case default: s="Unknown"; break;
+		}		
+		sprintf(q->desc, "AVRCP status %s, %s", q->parm, s);
+	}
+	else if (!strcmp(q->code, "MP"))
+		strcpy(q->desc, "Music paused");
+	else if (!strcmp(q->code, "MR"))
+		strcpy(q->desc, "Music resumed");
+	else if (!strcmp(q->code, "MS"))
+		strcpy(q->desc, "Music rewind");
+	else if (!strcmp(q->code, "MX"))
+		strcpy(q->desc, "Music forward");
+	else if (!strcmp(q->code, "MU"))
+	{
+		i = atoi(q->parm);
+		switch(i)
+		{
+			case 1: s="Ready (to be connected)"; break;
+			case 2: s="Initializing"; break;
+			case 3: s="Signalling Active"; break;
+			case 4: s="Connected"; break;
+			case 5: s="Streaming"; break;
+			case default: s="Unknown"; break;
+		}
+		sprintf(q->desc, "A2DP status %s, %s", q->parm, s);
+	}
+	else if (!strcmp(q->code, "MY"))
+		strcpy(q->desc, "AV disconnected");
+	else if (!strcmp(q->code, "PA"))
+		sprintf(q->desc, "PA<%s>", q->parm);
+	else if (!strcmp(q->code, "PC"))
+		strcpy(q->desc, "PC");
+	else if (!strcmp(q->code, "AE"))
+		strcpy(q->desc, "Audio config error");
+	else if (!strcmp(q->code, "AF"))
+		strcpy(q->desc, "Audio codec closed");
+	else if (!strcmp(q->code, "AS"))
+		strcpy(q->desc, "Audio codec in phone call mode");
+	else if (!strcmp(q->code, "ER"))
+		sprintf(q->desc, "ER<%s>", q->parm);
+	else if (!strcmp(q->code, "NO"))
+		sprintf(q->desc, "NO<%s>", q->parm);
+	else if (!strcmp(q->code, "EP"))
+		sprintf(q->desc, "EP<%s>", q->parm);
 }
 
 gboolean indication_idle(gpointer data)
@@ -276,7 +491,7 @@ gboolean indication_idle(gpointer data)
 	node *q = (node *)data;
 	token *t = &(q->data);
 
-	printf("indication %s %s-%s %s\n", t->txrx, t->code, t->parm, t->desc);
+//printf("indication %s %s-%s %s\n", t->txrx, t->code, t->parm, t->desc);
 	indicator_description(t);
 	gtk_list_store_append(store, &iter);
 	gtk_list_store_set(store, &iter, COL_TXRX, t->txrx, COL_CODE, t->code, COL_PARM, t->parm, COL_DESCRIPTION, t->desc, -1);
@@ -304,13 +519,24 @@ static gpointer process_indication_thread(gpointer args)
 	pthread_exit(&(c->rret[1]));
 }
 
+void fill_tx_token(token *t, char *code, char *parm)
+{
+	strcpy(t->txrx, "TX");
+	strcpy(t->code, code);
+	strcpy(t->code, parm);
+	t->desc[0] = '\0';
+}
+
 void send_message(cp2102 *c, token *t)
 {
 	char msg[msglength];
 
-	sprintf(msg, "%s%s%s%s", cmdheader, t->code, t->parm, crlf);
-	printf("sending -%s-\n", msg);
-	fputs(msg, c->f);
+	if (c->f)
+	{
+		sprintf(msg, "%s%s%s%s", cmdheader, t->code, t->parm, crlf);
+//printf("sending -%s-\n", msg);
+		fputs(msg, c->f);
+	}
 }
 
 gboolean command_idle(gpointer data)
@@ -318,7 +544,8 @@ gboolean command_idle(gpointer data)
 	node *q = (node *)data;
 	token *t = &(q->data);
 
-	printf("command %s %s%s %s\n", t->txrx, t->code, t->parm, t->desc);
+//printf("command %s %s-%s %s\n", t->txrx, t->code, t->parm, t->desc);
+	command_description(t);
 	gtk_list_store_append(store, &iter);
 	gtk_list_store_set(store, &iter, COL_TXRX, t->txrx, COL_CODE, t->code, COL_PARM, t->parm, COL_DESCRIPTION, t->desc, -1);
 
@@ -347,12 +574,16 @@ static gpointer write_command_thread(gpointer args)
 }
 
 
-void set_baud_rate(char* dev, speed_t baud)
+int set_baud_rate(char* dev, speed_t baud)
 {
 	int fd;
 	struct termios settings;
 
-	fd = open(dev, O_RDWR | O_NONBLOCK);
+	if ((fd=open(dev, O_RDWR | O_NONBLOCK))==-1)
+	{
+		printf("Cannot open %s\n", dev)
+		return(0);
+	}
 
 	tcgetattr(fd, &settings);
 	cfsetospeed(&settings, baud); // baud rate
@@ -362,22 +593,27 @@ void set_baud_rate(char* dev, speed_t baud)
 	tcflush(fd, TCIFLUSH);
 
 	close(fd);
+	return(1);
+}
+
+void open_device_start_read_thread(cp2102 *c)
+{
+	if (!(c->f = fopen(c->devicepath, "r+")))
+		printf("Cannot open %s\n", c->devicepath);
+
+	err = pthread_create(&(c->rtid[0]), NULL, &read_indication_thread, (void *)c);
+	if (err)
+	{}
 }
 
 void create_threads(cp2102 *c)
 {
+	int err;
+
 	q_init(&(c->rq), 10);
 	q_init(&(c->tq), 10);
 
-	if (!(c->f = fopen(c->devicepath, "r+")))
-	{
-		printf("Cannot open %s\n", c->devicepath);
-	}
-
-	int err;
-	err = pthread_create(&(c->rtid[0]), NULL, &read_indication_thread, (void *)c);
-	if (err)
-	{}
+	open_device_start_read_thread(c);
 
 	err = pthread_create(&(c->rtid[1]), NULL, &process_indication_thread, (void *)c);
 	if (err)
@@ -391,12 +627,16 @@ void create_threads(cp2102 *c)
 void terminate_threads(cp2102 *c)
 {
 	int i;
-
-//	fclose(c->f);
-//	if ((i=pthread_join(c->rtid[0], NULL)))
-//		printf("pthread_join error, c->rtid[0], %d\n", i);
+	token t;
 
 	q_signalstop(&(c->rq));
+
+	fill_tx_token(&t, "MO", ""); 
+	q_add(&(c->tq), &t); // send a query message to get a response to wake up read_indication_thread()
+
+	if ((i=pthread_join(c->rtid[0], NULL)))
+		printf("pthread_join error, c->rtid[0], %d\n", i);
+
 	if ((i=pthread_join(c->rtid[1], NULL)))
 		printf("pthread_join error, c->rtid[1], %d\n", i);
 
@@ -404,10 +644,13 @@ void terminate_threads(cp2102 *c)
 
 
 	q_signalstop(&(c->tq));
+
 	if ((i=pthread_join(c->ttid[0], NULL)))
 		printf("pthread_join error, c->ttid[0], %d\n", i);
 
 	q_destroy(&(c->tq));
+
+	fclose(c->f);
 }
 
 static gboolean delete_event(GtkWidget *widget, GdkEvent *event, gpointer data)
@@ -500,13 +743,8 @@ static void button1_clicked(GtkWidget *button, gpointer data)
 	cp2102 *c = (cp2102 *)data;
 	token t;
 
-	strcpy(t.txrx, "TX");
-	strcpy(t.code, "CA");
-	t.parm[0] = '\0';
-	strcpy(t.desc, "Set pairing, waiting for the remote device to connect. Discoverable for 2 min.");
-printf("adding\n");
+	fill_tx_token(&t, "CA", "");
 	q_add(&(c->tq), &t);
-printf("added command %s %s %s\n", t.txrx, t.code, t.parm);
 }
 
 int main(int argc, char **argv)
@@ -516,7 +754,8 @@ int main(int argc, char **argv)
 
 	cp2102 c;
 	strcpy(c.devicepath, "/dev/ttyUSB0");
-	set_baud_rate(c.devicepath, B115200);
+	if (!set_baud_rate(c.devicepath, B115200))
+		return(0);
 
 	/* This is called in all GTK applications. Arguments are parsed
 	 * from the command line and are returned to the application. */
@@ -577,5 +816,5 @@ int main(int argc, char **argv)
 
 	gtk_main();
 
-	return 0;
+	return(0);
 }

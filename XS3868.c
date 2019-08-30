@@ -837,7 +837,7 @@ void setup_default_icon(char *filename)
 		gtk_window_set_default_icon_list(list);
 		g_list_free(list);
 		g_object_unref(pixbuf);
-    	}
+	}
 }
 
 static GtkTreeModel* create_and_fill_model()
@@ -1287,8 +1287,7 @@ int main(int argc, char **argv)
 	cp2102 c;
 	strcpy(c.devicepath, "/dev/ttyUSB0");
 	if (!set_baud_rate(c.devicepath, B115200))
-		//return(0);
-		;
+		return(0);
 
 	/* This is called in all GTK applications. Arguments are parsed
 	 * from the command line and are returned to the application. */

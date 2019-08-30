@@ -51,9 +51,17 @@ GtkListStore *store;
 GtkTreeIter iter;
 GtkWidget *button_box1;
 GtkWidget *button1;
+GtkWidget *glyphbox1;
+GtkWidget *icon1;
 GtkWidget *button13;
+GtkWidget *glyphbox13;
+GtkWidget *icon13;
 GtkWidget *button14;
+GtkWidget *glyphbox14;
+GtkWidget *icon14;
 GtkWidget *button15;
+GtkWidget *glyphbox15;
+GtkWidget *icon15;
 
 GtkWidget *button_box2;
 GtkWidget *button2;
@@ -81,9 +89,17 @@ GtkWidget *icon8;
 
 GtkWidget *button_box3;
 GtkWidget *button16;
+GtkWidget *glyphbox16;
+GtkWidget *icon16;
 GtkWidget *button17;
+GtkWidget *glyphbox17;
+GtkWidget *icon17;
 GtkWidget *button9;
+GtkWidget *glyphbox9;
+GtkWidget *icon9;
 GtkWidget *button10;
+GtkWidget *glyphbox10;
+GtkWidget *icon10;
 GtkWidget *button11;
 GtkWidget *glyphbox11;
 GtkWidget *icon11;
@@ -987,26 +1003,46 @@ int main(int argc, char **argv)
 	gtk_container_add(GTK_CONTAINER(scrolled_window), listview);
 
 // buttonbox
-	button_box1 = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-	gtk_button_box_set_layout((GtkButtonBox *)button_box1, GTK_BUTTONBOX_START);
+	//button_box1 = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+	//gtk_button_box_set_layout((GtkButtonBox *)button_box1, GTK_BUTTONBOX_START);
+	button_box1 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(vbox), button_box1);
 
-	button1 = gtk_button_new_with_label("Set Pairing");
+	button1 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button1), "clicked", G_CALLBACK(button1_clicked), (void*)&c);
 	gtk_container_add(GTK_CONTAINER(button_box1), button1);
+	glyphbox1 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button1), glyphbox1);
+	icon1 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon1), "./images/EnterPairing.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox1), icon1);
 
-	button13 = gtk_button_new_with_label("Exit Pairing");
+	button13 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button13), "clicked", G_CALLBACK(button13_clicked), (void*)&c);
 	gtk_container_add(GTK_CONTAINER(button_box1), button13);
+	glyphbox13 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button13), glyphbox13);
+	icon13 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon13), "./images/ExitPairing.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox13), icon13);
 
-	button14 = gtk_button_new_with_label("Connect Last");
+	button14 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button14), "clicked", G_CALLBACK(button14_clicked), (void*)&c);
 	gtk_container_add(GTK_CONTAINER(button_box1), button14);
+	glyphbox14 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button14), glyphbox14);
+	icon14 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon14), "./images/ConnectLast.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox14), icon14);
 
-	button15 = gtk_button_new_with_label("Disconnect");
+	button15 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button15), "clicked", G_CALLBACK(button15_clicked), (void*)&c);
 	gtk_container_add(GTK_CONTAINER(button_box1), button15);
-
+	glyphbox15 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button15), glyphbox15);
+	icon15 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon15), "./images/Disconnect.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox15), icon15);
 
 // buttonbox
 	//button_box2 = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
@@ -1085,21 +1121,41 @@ int main(int argc, char **argv)
 	button_box3 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(vbox), button_box3);
 
-	button16 = gtk_button_new_with_label("Conn AV");
+	button16 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button16), "clicked", G_CALLBACK(button16_clicked), (void*)&c);
 	gtk_container_add(GTK_CONTAINER(button_box3), button16);
+	glyphbox16 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button16), glyphbox16);
+	icon16 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon16), "./images/ConnectBT.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox16), icon16);
 
-	button17 = gtk_button_new_with_label("Disc AV");
+	button17 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button17), "clicked", G_CALLBACK(button17_clicked), (void*)&c);
 	gtk_container_add(GTK_CONTAINER(button_box3), button17);
+	glyphbox17 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button17), glyphbox17);
+	icon17 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon17), "./images/DisconnectBT.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox17), icon17);
 
-	button9 = gtk_button_new_with_label("QA2DP");
+	button9 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button9), "clicked", G_CALLBACK(button9_clicked), (void*)&c);
 	gtk_container_add(GTK_CONTAINER(button_box3), button9);
+	glyphbox9 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button9), glyphbox9);
+	icon9 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon9), "./images/QueryStatus.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox9), icon9);
 
-	button10 = gtk_button_new_with_label("SW2");
+	button10 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button10), "clicked", G_CALLBACK(button10_clicked), (void*)&c);
 	gtk_container_add(GTK_CONTAINER(button_box3), button10);
+	glyphbox10 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button10), glyphbox10);
+	icon10 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon10), "./images/SwitchDevices.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox10), icon10);
 
 	button11 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button11), "clicked", G_CALLBACK(button11_clicked), (void*)&c);

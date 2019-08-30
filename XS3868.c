@@ -146,6 +146,7 @@ GtkWidget *button43;
 GtkWidget *glyphbox43;
 GtkWidget *icon43;
 
+GtkWidget *button_box2v;
 GtkWidget *button_box2;
 GtkWidget *button2;
 GtkWidget *glyphbox2;
@@ -170,6 +171,7 @@ GtkWidget *button8;
 GtkWidget *glyphbox8;
 GtkWidget *icon8;
 
+GtkWidget *button_box3v;
 GtkWidget *button_box3;
 GtkWidget *button16;
 GtkWidget *glyphbox16;
@@ -1298,7 +1300,7 @@ int main(int argc, char **argv)
 	gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
 	gtk_container_set_border_width(GTK_CONTAINER(window), 2);
 	//gtk_widget_set_size_request(window, 100, 100);
-	gtk_window_set_title(GTK_WINDOW(window), "XS3868");
+	gtk_window_set_title(GTK_WINDOW(window), "XS3868 via CP2102");
 	//gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
 
 	/* When the window is given the "delete-event" signal (this is given
@@ -1649,10 +1651,13 @@ int main(int argc, char **argv)
 	gtk_container_add(GTK_CONTAINER(glyphbox42), icon42);
 
 // buttonbox A2DP
+	button_box2v = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
 	//button_box2 = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
 	//gtk_button_box_set_layout((GtkButtonBox *)button_box2, GTK_BUTTONBOX_START);
 	button_box2 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	//gtk_container_add(GTK_CONTAINER(vbox), button_box2);
+
+	gtk_container_add(GTK_CONTAINER(button_box2v), button_box2);
 
 	button2 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button2), "clicked", G_CALLBACK(button2_clicked), (void*)&c);
@@ -1720,10 +1725,13 @@ int main(int argc, char **argv)
 	gtk_container_add(GTK_CONTAINER(glyphbox8), icon8);
 
 // buttonbox AVRCP
+	button_box3v = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
 	//button_box3 = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
 	//gtk_button_box_set_layout((GtkButtonBox *)button_box3, GTK_BUTTONBOX_START);
 	button_box3 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	//gtk_container_add(GTK_CONTAINER(vbox), button_box3);
+
+	gtk_container_add(GTK_CONTAINER(button_box3v), button_box3);
 
 	button16 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button16), "clicked", G_CALLBACK(button16_clicked), (void*)&c);
@@ -1790,9 +1798,9 @@ int main(int argc, char **argv)
 	nbpage1 = gtk_label_new("HFP");
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), button_box_group1, nbpage1);
 	nbpage2 = gtk_label_new("A2DP");
-	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), button_box2, nbpage2);
+	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), button_box2v, nbpage2);
 	nbpage3 = gtk_label_new("AVRCP");
-	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), button_box3, nbpage3);
+	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), button_box3v, nbpage3);
 	g_signal_connect(GTK_NOTEBOOK(notebook), "switch-page", G_CALLBACK(page_switched), (void*)&c);
 	//gtk_box_pack_start(GTK_BOX(vbox), notebook, TRUE, TRUE, 0);
 	gtk_container_add(GTK_CONTAINER(vbox), notebook);

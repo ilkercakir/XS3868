@@ -49,6 +49,8 @@ GtkWidget *frame1;
 GtkWidget *scrolled_window;
 GtkListStore *store;
 GtkTreeIter iter;
+
+GtkWidget *button_box_group1;
 GtkWidget *button_box1;
 GtkWidget *button1;
 GtkWidget *glyphbox1;
@@ -62,6 +64,87 @@ GtkWidget *icon14;
 GtkWidget *button15;
 GtkWidget *glyphbox15;
 GtkWidget *icon15;
+GtkWidget *button18;
+GtkWidget *glyphbox18;
+GtkWidget *icon18;
+GtkWidget *button19;
+GtkWidget *glyphbox19;
+GtkWidget *icon19;
+GtkWidget *button20;
+GtkWidget *glyphbox20;
+GtkWidget *icon20;
+GtkWidget *button21;
+GtkWidget *glyphbox21;
+GtkWidget *icon21;
+GtkWidget *button22;
+GtkWidget *glyphbox22;
+GtkWidget *icon22;
+GtkWidget *button23;
+GtkWidget *glyphbox23;
+GtkWidget *icon23;
+GtkWidget *button24;
+GtkWidget *glyphbox24;
+GtkWidget *icon24;
+GtkWidget *button25;
+GtkWidget *glyphbox25;
+GtkWidget *icon25;
+GtkWidget *button26;
+GtkWidget *glyphbox26;
+GtkWidget *icon26_1;
+GtkWidget *icon26_2;
+GtkWidget *button27;
+GtkWidget *glyphbox27;
+GtkWidget *icon27_1;
+GtkWidget *icon27_2;
+GtkWidget *button28;
+GtkWidget *glyphbox28;
+GtkWidget *icon28_1;
+GtkWidget *icon28_2;
+GtkWidget *button29;
+GtkWidget *glyphbox29;
+GtkWidget *icon29;
+GtkWidget *button30;
+GtkWidget *glyphbox30;
+GtkWidget *icon30;
+GtkWidget *button31;
+GtkWidget *glyphbox31;
+GtkWidget *icon31;
+GtkWidget *button32;
+GtkWidget *glyphbox32;
+GtkWidget *icon32;
+GtkWidget *button33;
+GtkWidget *glyphbox33;
+GtkWidget *icon33;
+GtkWidget *button34;
+GtkWidget *glyphbox34;
+GtkWidget *icon34;
+GtkWidget *button35;
+GtkWidget *glyphbox35;
+GtkWidget *icon35;
+GtkWidget *button36;
+GtkWidget *glyphbox36;
+GtkWidget *icon36;
+GtkWidget *button37;
+GtkWidget *glyphbox37;
+GtkWidget *icon37;
+GtkWidget *button38;
+GtkWidget *glyphbox38;
+GtkWidget *icon38;
+GtkWidget *button39;
+GtkWidget *glyphbox39;
+GtkWidget *icon39;
+GtkWidget *button40;
+GtkWidget *glyphbox40;
+GtkWidget *icon40;
+GtkWidget *button41;
+GtkWidget *glyphbox41;
+GtkWidget *icon41;
+GtkWidget *button42;
+GtkWidget *glyphbox42;
+GtkWidget *icon42;
+GtkWidget *button43;
+GtkWidget *glyphbox43;
+GtkWidget *icon43;
 
 GtkWidget *button_box2;
 GtkWidget *button2;
@@ -106,6 +189,16 @@ GtkWidget *icon11;
 GtkWidget *button12;
 GtkWidget *glyphbox12;
 GtkWidget *icon12;
+
+GtkWidget *button_box4;
+GtkWidget *button_box5;
+GtkWidget *button_box6;
+GtkWidget *button_box7;
+
+GtkWidget *notebook;
+GtkWidget *nbpage1;
+GtkWidget *nbpage2;
+GtkWidget *nbpage3;
 
 enum
 {
@@ -792,6 +885,13 @@ static GtkWidget* create_view_and_model()
 	return view;
 }
 
+void page_switched(GtkNotebook *notebook, GtkWidget *page, guint page_num, gpointer user_data)
+{
+	//cp2102 *c = (cp2102 *)user_data;
+
+//printf("switched to page %d\n", page_num);
+}
+
 static void button1_clicked(GtkWidget *button, gpointer data)
 {
 	cp2102 *c = (cp2102 *)data;
@@ -945,6 +1045,240 @@ static void button17_clicked(GtkWidget *button, gpointer data)
 	q_add(&(c->tq), &t);
 }
 
+static void button18_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CE", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button19_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CF", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button20_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CG", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button21_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CH", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button22_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CI", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button23_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CJ", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button24_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CM", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button25_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CO", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button26_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CQ", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button27_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CR", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button28_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CS", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button29_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CT", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button30_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CW", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button31_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CX", "1");
+	q_add(&(c->tq), &t);
+}
+
+static void button32_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CX", "2");
+	q_add(&(c->tq), &t);
+}
+
+static void button33_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CX", "3");
+	q_add(&(c->tq), &t);
+}
+
+static void button34_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CX", "4");
+	q_add(&(c->tq), &t);
+}
+
+static void button35_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CX", "5");
+	q_add(&(c->tq), &t);
+}
+
+static void button36_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CX", "6");
+	q_add(&(c->tq), &t);
+}
+
+static void button37_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CX", "7");
+	q_add(&(c->tq), &t);
+}
+
+static void button38_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CX", "8");
+	q_add(&(c->tq), &t);
+}
+
+static void button39_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CX", "9");
+	q_add(&(c->tq), &t);
+}
+
+static void button40_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CX", "0");
+	q_add(&(c->tq), &t);
+}
+
+static void button41_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CX", "*");
+	q_add(&(c->tq), &t);
+}
+
+static void button42_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CX", "#");
+	q_add(&(c->tq), &t);
+}
+
+static void button43_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CY", "");
+	q_add(&(c->tq), &t);
+}
+
 int main(int argc, char **argv)
 {
 	setlocale(LC_ALL, "tr_TR.UTF-8");
@@ -953,7 +1287,8 @@ int main(int argc, char **argv)
 	cp2102 c;
 	strcpy(c.devicepath, "/dev/ttyUSB0");
 	if (!set_baud_rate(c.devicepath, B115200))
-		return(0);
+		//return(0);
+		;
 
 	/* This is called in all GTK applications. Arguments are parsed
 	 * from the command line and are returned to the application. */
@@ -1002,11 +1337,14 @@ int main(int argc, char **argv)
 	listview = create_view_and_model();
 	gtk_container_add(GTK_CONTAINER(scrolled_window), listview);
 
-// buttonbox
+// botton_box_group
+	button_box_group1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
+
+// buttonbox HFP #1
 	//button_box1 = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
 	//gtk_button_box_set_layout((GtkButtonBox *)button_box1, GTK_BUTTONBOX_START);
 	button_box1 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
-	gtk_container_add(GTK_CONTAINER(vbox), button_box1);
+	//gtk_container_add(GTK_CONTAINER(vbox), button_box1);
 
 	button1 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button1), "clicked", G_CALLBACK(button1_clicked), (void*)&c);
@@ -1044,11 +1382,278 @@ int main(int argc, char **argv)
 	gtk_image_set_from_file(GTK_IMAGE(icon15), "./images/Disconnect.png");
 	gtk_container_add(GTK_CONTAINER(glyphbox15), icon15);
 
-// buttonbox
+// buttonbox HFP #2
+	//button_box1 = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+	//gtk_button_box_set_layout((GtkButtonBox *)button_box1, GTK_BUTTONBOX_START);
+	button_box4 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	//gtk_container_add(GTK_CONTAINER(vbox), button_box1);
+
+	button18 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button18), "clicked", G_CALLBACK(button18_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box4), button18);
+	glyphbox18 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button18), glyphbox18);
+	icon18 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon18), "./images/AnswerCall.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox18), icon18);
+
+	button19 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button19), "clicked", G_CALLBACK(button19_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box4), button19);
+	glyphbox19 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button19), glyphbox19);
+	icon19 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon19), "./images/RejectCall.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox19), icon19);
+
+	button20 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button20), "clicked", G_CALLBACK(button20_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box4), button20);
+	glyphbox20 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button20), glyphbox20);
+	icon20 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon20), "./images/EndCall.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox20), icon20);
+
+	button26 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button26), "clicked", G_CALLBACK(button26_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box4), button26);
+	glyphbox26 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button26), glyphbox26);
+	icon26_1 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon26_1), "./images/ReleaseHeldCall.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox26), icon26_1);
+	icon26_2 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon26_2), "./images/RejectCall.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox26), icon26_2);
+
+	button27 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button27), "clicked", G_CALLBACK(button27_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box4), button27);
+	glyphbox27 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button27), glyphbox27);
+	icon27_1 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon27_1), "./images/ReleaseHeldCall.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox27), icon27_1);
+	icon27_2 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon27_2), "./images/AnswerCall.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox27), icon27_2);
+
+	button28 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button28), "clicked", G_CALLBACK(button28_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box4), button28);
+	glyphbox28 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button28), glyphbox28);
+	icon28_1 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon28_1), "./images/HoldCall.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox28), icon28_1);
+	icon28_2 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon28_2), "./images/AnswerCall.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox28), icon28_2);
+
+	button29 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button29), "clicked", G_CALLBACK(button29_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box4), button29);
+	glyphbox29 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button29), glyphbox29);
+	icon29 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon29), "./images/ConferenceCall.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox29), icon29);
+
+// buttonbox HFP #3
+	//button_box1 = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+	//gtk_button_box_set_layout((GtkButtonBox *)button_box1, GTK_BUTTONBOX_START);
+	button_box5 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	//gtk_container_add(GTK_CONTAINER(vbox), button_box1);
+
+	button21 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button21), "clicked", G_CALLBACK(button21_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box5), button21);
+	glyphbox21 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button21), glyphbox21);
+	icon21 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon21), "./images/Redial.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox21), icon21);
+
+	button22 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button22), "clicked", G_CALLBACK(button22_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box5), button22);
+	glyphbox22 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button22), glyphbox22);
+	icon22 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon22), "./images/VoiceDial.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox22), icon22);
+
+	button23 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button23), "clicked", G_CALLBACK(button23_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box5), button23);
+	glyphbox23 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button23), glyphbox23);
+	icon23 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon23), "./images/CancelVoiceDial.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox23), icon23);
+
+	button30 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button30), "clicked", G_CALLBACK(button30_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box5), button30);
+	glyphbox30 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button30), glyphbox30);
+	icon30 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon30), "./images/Dial.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox30), icon30);
+
+// buttonbox HFP #4
+	//button_box1 = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+	//gtk_button_box_set_layout((GtkButtonBox *)button_box1, GTK_BUTTONBOX_START);
+	button_box6 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	//gtk_container_add(GTK_CONTAINER(vbox), button_box1);
+
+	button24 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button24), "clicked", G_CALLBACK(button24_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box6), button24);
+	glyphbox24 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button24), glyphbox24);
+	icon24 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon24), "./images/MuteUnmuteMic.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox24), icon24);
+
+	button25 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button25), "clicked", G_CALLBACK(button25_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box6), button25);
+	glyphbox25 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button25), glyphbox25);
+	icon25 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon25), "./images/TransCallToFromHS.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox25), icon25);
+
+	button43 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button43), "clicked", G_CALLBACK(button43_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box1), button43);
+	glyphbox43 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button43), glyphbox43);
+	icon43 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon43), "./images/QueryStatus.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox43), icon43);
+
+// buttonbox HFP #4
+	//button_box1 = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+	//gtk_button_box_set_layout((GtkButtonBox *)button_box1, GTK_BUTTONBOX_START);
+	button_box7 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	//gtk_container_add(GTK_CONTAINER(vbox), button_box1);
+
+	button31 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button31), "clicked", G_CALLBACK(button31_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box7), button31);
+	glyphbox31 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button31), glyphbox31);
+	icon31 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon31), "./images/001.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox31), icon31);
+
+	button32 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button32), "clicked", G_CALLBACK(button32_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box7), button32);
+	glyphbox32 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button32), glyphbox32);
+	icon32 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon32), "./images/002.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox32), icon32);
+
+	button33 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button33), "clicked", G_CALLBACK(button33_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box7), button33);
+	glyphbox33 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button33), glyphbox33);
+	icon33 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon33), "./images/003.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox33), icon33);
+
+	button34 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button34), "clicked", G_CALLBACK(button34_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box7), button34);
+	glyphbox34 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button34), glyphbox34);
+	icon34 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon34), "./images/004.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox34), icon34);
+
+	button35 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button35), "clicked", G_CALLBACK(button35_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box7), button35);
+	glyphbox35 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button35), glyphbox35);
+	icon35 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon35), "./images/005.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox35), icon35);
+
+	button36 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button36), "clicked", G_CALLBACK(button36_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box7), button36);
+	glyphbox36 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button36), glyphbox36);
+	icon36 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon36), "./images/006.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox36), icon36);
+
+	button37 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button37), "clicked", G_CALLBACK(button37_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box7), button37);
+	glyphbox37 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button37), glyphbox37);
+	icon37 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon37), "./images/007.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox37), icon37);
+
+	button38 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button38), "clicked", G_CALLBACK(button38_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box7), button38);
+	glyphbox38 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button38), glyphbox38);
+	icon38 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon38), "./images/008.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox38), icon38);
+
+	button39 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button39), "clicked", G_CALLBACK(button39_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box7), button39);
+	glyphbox39 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button39), glyphbox39);
+	icon39 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon39), "./images/009.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox39), icon39);
+
+	button40 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button40), "clicked", G_CALLBACK(button40_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box7), button40);
+	glyphbox40 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button40), glyphbox40);
+	icon40 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon40), "./images/010.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox40), icon40);
+
+	button41 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button41), "clicked", G_CALLBACK(button41_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box7), button41);
+	glyphbox41 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button41), glyphbox41);
+	icon41 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon41), "./images/011.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox41), icon41);
+
+	button42 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button42), "clicked", G_CALLBACK(button42_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box7), button42);
+	glyphbox42 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button42), glyphbox42);
+	icon42 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon42), "./images/012.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox42), icon42);
+
+// buttonbox A2DP
 	//button_box2 = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
 	//gtk_button_box_set_layout((GtkButtonBox *)button_box2, GTK_BUTTONBOX_START);
 	button_box2 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
-	gtk_container_add(GTK_CONTAINER(vbox), button_box2);
+	//gtk_container_add(GTK_CONTAINER(vbox), button_box2);
 
 	button2 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button2), "clicked", G_CALLBACK(button2_clicked), (void*)&c);
@@ -1115,11 +1720,11 @@ int main(int argc, char **argv)
 	gtk_image_set_from_file(GTK_IMAGE(icon8), "./images/FFFRStop.png");
 	gtk_container_add(GTK_CONTAINER(glyphbox8), icon8);
 
-// buttonbox
+// buttonbox AVRCP
 	//button_box3 = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
 	//gtk_button_box_set_layout((GtkButtonBox *)button_box3, GTK_BUTTONBOX_START);
 	button_box3 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
-	gtk_container_add(GTK_CONTAINER(vbox), button_box3);
+	//gtk_container_add(GTK_CONTAINER(vbox), button_box3);
 
 	button16 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button16), "clicked", G_CALLBACK(button16_clicked), (void*)&c);
@@ -1174,6 +1779,24 @@ int main(int argc, char **argv)
 	icon12 = gtk_image_new();
 	gtk_image_set_from_file(GTK_IMAGE(icon12), "./images/VolumeUp.png");
 	gtk_container_add(GTK_CONTAINER(glyphbox12), icon12);
+
+	gtk_container_add(GTK_CONTAINER(button_box_group1), button_box1);
+	gtk_container_add(GTK_CONTAINER(button_box_group1), button_box4);
+	gtk_container_add(GTK_CONTAINER(button_box_group1), button_box5);
+	gtk_container_add(GTK_CONTAINER(button_box_group1), button_box6);
+	gtk_container_add(GTK_CONTAINER(button_box_group1), button_box7);
+
+// tabbed notebook
+	notebook = gtk_notebook_new();
+	nbpage1 = gtk_label_new("HFP");
+	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), button_box_group1, nbpage1);
+	nbpage2 = gtk_label_new("A2DP");
+	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), button_box2, nbpage2);
+	nbpage3 = gtk_label_new("AVRCP");
+	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), button_box3, nbpage3);
+	g_signal_connect(GTK_NOTEBOOK(notebook), "switch-page", G_CALLBACK(page_switched), (void*)&c);
+	//gtk_box_pack_start(GTK_BOX(vbox), notebook, TRUE, TRUE, 0);
+	gtk_container_add(GTK_CONTAINER(vbox), notebook);
 
 	gtk_widget_show_all(window);
 

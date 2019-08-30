@@ -1,4 +1,4 @@
-﻿/*
+/*
  * XS3868.c
  * 
  * Copyright 2019 pc <pc@pc-ubuntu>
@@ -51,6 +51,45 @@ GtkListStore *store;
 GtkTreeIter iter;
 GtkWidget *button_box1;
 GtkWidget *button1;
+GtkWidget *button13;
+GtkWidget *button14;
+GtkWidget *button15;
+
+GtkWidget *button_box2;
+GtkWidget *button2;
+GtkWidget *glyphbox2;
+GtkWidget *icon2;
+GtkWidget *label2;
+GtkWidget *button3;
+GtkWidget *glyphbox3;
+GtkWidget *icon3;
+GtkWidget *button4;
+GtkWidget *glyphbox4;
+GtkWidget *icon4;
+GtkWidget *button5;
+GtkWidget *glyphbox5;
+GtkWidget *icon5;
+GtkWidget *button6;
+GtkWidget *glyphbox6;
+GtkWidget *icon6;
+GtkWidget *button7;
+GtkWidget *glyphbox7;
+GtkWidget *icon7;
+GtkWidget *button8;
+GtkWidget *glyphbox8;
+GtkWidget *icon8;
+
+GtkWidget *button_box3;
+GtkWidget *button16;
+GtkWidget *button17;
+GtkWidget *button9;
+GtkWidget *button10;
+GtkWidget *button11;
+GtkWidget *glyphbox11;
+GtkWidget *icon11;
+GtkWidget *button12;
+GtkWidget *glyphbox12;
+GtkWidget *icon12;
 
 enum
 {
@@ -96,7 +135,7 @@ typedef struct
 typedef struct
 {
 	char devicepath[50];
-	FILE *f;
+	FILE *fr, *fw;
 	messagequeue rq, tq;
 	pthread_t rtid[2], ttid[2];
 	int rret[2], tret[2];
@@ -251,10 +290,10 @@ static gpointer read_indication_thread(gpointer args)
 	int i;
 	char *s;
 
-	if (c->f)
+	if (c->fr)
 	{
 		strcpy(indication.txrx, "RX"); 
-		while ((s=fgets(&(indication.code[0]), msglength, c->f)))
+		while ((s=fgets(&(indication.code[0]), msglength, c->fr)))
 		{
 			i = strlen(s);
 //printf("read_indication_thread : %s length:%d\n", s, i);
@@ -428,7 +467,7 @@ void indicator_description(token *q)
 			case 4: s="Outgoing call"; break;
 			case 5: s="Incoming call"; break;
 			case 6: s="Ongoing call"; break;
-			case default: s="Unknown"; break;
+			default: s="Unknown"; break;
 		}
 		sprintf(q->desc, "HFP Status %s, %s", q->parm, s);
 	}
@@ -440,7 +479,7 @@ void indicator_description(token *q)
 			case 1: s="Ready (to be connected)"; break;
 			case 2: s="Connecting"; break;
 			case 3: s="Connected"; break;
-			case default: s="Unknown"; break;
+			default: s="Unknown"; break;
 		}		
 		sprintf(q->desc, "AVRCP status %s, %s", q->parm, s);
 	}
@@ -462,7 +501,7 @@ void indicator_description(token *q)
 			case 3: s="Signalling Active"; break;
 			case 4: s="Connected"; break;
 			case 5: s="Streaming"; break;
-			case default: s="Unknown"; break;
+			default: s="Unknown"; break;
 		}
 		sprintf(q->desc, "A2DP status %s, %s", q->parm, s);
 	}
@@ -484,6 +523,8 @@ void indicator_description(token *q)
 		sprintf(q->desc, "NO<%s>", q->parm);
 	else if (!strcmp(q->code, "EP"))
 		sprintf(q->desc, "EP<%s>", q->parm);
+	else if (!strcmp(q->code, "VO"))
+		sprintf(q->desc, "Volume Level %s", q->parm+1);
 }
 
 gboolean indication_idle(gpointer data)
@@ -523,7 +564,7 @@ void fill_tx_token(token *t, char *code, char *parm)
 {
 	strcpy(t->txrx, "TX");
 	strcpy(t->code, code);
-	strcpy(t->code, parm);
+	strcpy(t->parm, parm);
 	t->desc[0] = '\0';
 }
 
@@ -531,11 +572,10 @@ void send_message(cp2102 *c, token *t)
 {
 	char msg[msglength];
 
-	if (c->f)
+	if (c->fw)
 	{
 		sprintf(msg, "%s%s%s%s", cmdheader, t->code, t->parm, crlf);
-//printf("sending -%s-\n", msg);
-		fputs(msg, c->f);
+		fputs(msg, c->fw);
 	}
 }
 
@@ -565,8 +605,8 @@ static gpointer write_command_thread(gpointer args)
 
 	while((q = q_remove(&(c->tq))))
 	{
-		gdk_threads_add_idle(command_idle, (void*)q);
 		send_message(c, &(q->data));
+		gdk_threads_add_idle(command_idle, (void*)q);
 	}
 
 	c->tret[0] = 0;
@@ -581,7 +621,7 @@ int set_baud_rate(char* dev, speed_t baud)
 
 	if ((fd=open(dev, O_RDWR | O_NONBLOCK))==-1)
 	{
-		printf("Cannot open %s\n", dev)
+		printf("Cannot open %s\n", dev);
 		return(0);
 	}
 
@@ -596,16 +636,6 @@ int set_baud_rate(char* dev, speed_t baud)
 	return(1);
 }
 
-void open_device_start_read_thread(cp2102 *c)
-{
-	if (!(c->f = fopen(c->devicepath, "r+")))
-		printf("Cannot open %s\n", c->devicepath);
-
-	err = pthread_create(&(c->rtid[0]), NULL, &read_indication_thread, (void *)c);
-	if (err)
-	{}
-}
-
 void create_threads(cp2102 *c)
 {
 	int err;
@@ -613,7 +643,14 @@ void create_threads(cp2102 *c)
 	q_init(&(c->rq), 10);
 	q_init(&(c->tq), 10);
 
-	open_device_start_read_thread(c);
+	if (!(c->fr = fopen(c->devicepath, "r+")))
+		printf("Cannot open %s for input\n", c->devicepath);
+	if (!(c->fw = fopen(c->devicepath, "r+")))
+		printf("Cannot open %s for output\n", c->devicepath);
+
+	err = pthread_create(&(c->rtid[0]), NULL, &read_indication_thread, (void *)c);
+	if (err)
+	{}
 
 	err = pthread_create(&(c->rtid[1]), NULL, &process_indication_thread, (void *)c);
 	if (err)
@@ -650,7 +687,8 @@ void terminate_threads(cp2102 *c)
 
 	q_destroy(&(c->tq));
 
-	fclose(c->f);
+	fclose(c->fr);
+	fclose(c->fw);
 }
 
 static gboolean delete_event(GtkWidget *widget, GdkEvent *event, gpointer data)
@@ -747,6 +785,150 @@ static void button1_clicked(GtkWidget *button, gpointer data)
 	q_add(&(c->tq), &t);
 }
 
+static void button2_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "MA", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button3_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "MC", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button4_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "MD", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button5_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "ME", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button6_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "MR", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button7_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "MS", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button8_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "MT", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button9_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "MV", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button10_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "MZ", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button11_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "VD", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button12_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "VU", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button13_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CB", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button14_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CC", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button15_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "CD", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button16_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "MI", "");
+	q_add(&(c->tq), &t);
+}
+
+static void button17_clicked(GtkWidget *button, gpointer data)
+{
+	cp2102 *c = (cp2102 *)data;
+	token t;
+
+	fill_tx_token(&t, "MJ", "");
+	q_add(&(c->tq), &t);
+}
+
 int main(int argc, char **argv)
 {
 	setlocale(LC_ALL, "tr_TR.UTF-8");
@@ -767,7 +949,7 @@ int main(int argc, char **argv)
 	gtk_container_set_border_width(GTK_CONTAINER(window), 2);
 	//gtk_widget_set_size_request(window, 100, 100);
 	gtk_window_set_title(GTK_WINDOW(window), "XS3868");
-	gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
+	//gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
 
 	/* When the window is given the "delete-event" signal (this is given
 	* by the window manager, usually by the "close" option, or on the
@@ -789,7 +971,7 @@ int main(int argc, char **argv)
 
 // command - indicator frame
 	frame1 = gtk_frame_new("Commands / Indications");
-	gtk_container_add(GTK_CONTAINER(vbox), frame1);
+	gtk_box_pack_start(GTK_BOX(vbox), frame1, TRUE, TRUE, 0);
 
 	vbox1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
 	gtk_container_add(GTK_CONTAINER(frame1), vbox1);
@@ -798,7 +980,8 @@ int main(int argc, char **argv)
 	gtk_container_set_border_width(GTK_CONTAINER(scrolled_window), 10);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
 	gtk_widget_set_size_request(scrolled_window, 300, 100);
-	gtk_container_add(GTK_CONTAINER(vbox1), scrolled_window);
+	//gtk_container_add(GTK_CONTAINER(vbox1), scrolled_window);
+	gtk_box_pack_start(GTK_BOX(vbox1), scrolled_window, TRUE, TRUE, 0);
 
 	listview = create_view_and_model();
 	gtk_container_add(GTK_CONTAINER(scrolled_window), listview);
@@ -811,6 +994,130 @@ int main(int argc, char **argv)
 	button1 = gtk_button_new_with_label("Set Pairing");
 	g_signal_connect(GTK_BUTTON(button1), "clicked", G_CALLBACK(button1_clicked), (void*)&c);
 	gtk_container_add(GTK_CONTAINER(button_box1), button1);
+
+	button13 = gtk_button_new_with_label("Exit Pairing");
+	g_signal_connect(GTK_BUTTON(button13), "clicked", G_CALLBACK(button13_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box1), button13);
+
+	button14 = gtk_button_new_with_label("Connect Last");
+	g_signal_connect(GTK_BUTTON(button14), "clicked", G_CALLBACK(button14_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box1), button14);
+
+	button15 = gtk_button_new_with_label("Disconnect");
+	g_signal_connect(GTK_BUTTON(button15), "clicked", G_CALLBACK(button15_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box1), button15);
+
+
+// buttonbox
+	//button_box2 = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+	//gtk_button_box_set_layout((GtkButtonBox *)button_box2, GTK_BUTTONBOX_START);
+	button_box2 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(vbox), button_box2);
+
+	button2 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button2), "clicked", G_CALLBACK(button2_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box2), button2);
+	glyphbox2 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button2), glyphbox2);
+	icon2 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon2), "./images/PlayPause.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox2), icon2);
+	label2 = gtk_label_new("Play/Pause");
+	gtk_container_add(GTK_CONTAINER(glyphbox2), label2);
+
+	button3 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button3), "clicked", G_CALLBACK(button3_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box2), button3);
+	glyphbox3 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button3), glyphbox3);
+	icon3 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon3), "./images/Stop.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox3), icon3);
+
+	button4 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button4), "clicked", G_CALLBACK(button4_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box2), button4);
+	glyphbox4 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button4), glyphbox4);
+	icon4 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon4), "./images/Next.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox4), icon4);
+
+	button5 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button5), "clicked", G_CALLBACK(button5_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box2), button5);
+	glyphbox5 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button5), glyphbox5);
+	icon5 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon5), "./images/Previous.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox5), icon5);
+
+	button6 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button6), "clicked", G_CALLBACK(button6_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box2), button6);
+	glyphbox6 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button6), glyphbox6);
+	icon6 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon6), "./images/FastForward.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox6), icon6);
+
+	button7 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button7), "clicked", G_CALLBACK(button7_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box2), button7);
+	glyphbox7 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button7), glyphbox7);
+	icon7 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon7), "./images/FastRewind.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox7), icon7);
+
+	button8 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button8), "clicked", G_CALLBACK(button8_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box2), button8);
+	glyphbox8 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button8), glyphbox8);
+	icon8 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon8), "./images/FFFRStop.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox8), icon8);
+
+// buttonbox
+	//button_box3 = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+	//gtk_button_box_set_layout((GtkButtonBox *)button_box3, GTK_BUTTONBOX_START);
+	button_box3 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(vbox), button_box3);
+
+	button16 = gtk_button_new_with_label("Conn AV");
+	g_signal_connect(GTK_BUTTON(button16), "clicked", G_CALLBACK(button16_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box3), button16);
+
+	button17 = gtk_button_new_with_label("Disc AV");
+	g_signal_connect(GTK_BUTTON(button17), "clicked", G_CALLBACK(button17_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box3), button17);
+
+	button9 = gtk_button_new_with_label("QA2DP");
+	g_signal_connect(GTK_BUTTON(button9), "clicked", G_CALLBACK(button9_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box3), button9);
+
+	button10 = gtk_button_new_with_label("SW2");
+	g_signal_connect(GTK_BUTTON(button10), "clicked", G_CALLBACK(button10_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box3), button10);
+
+	button11 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button11), "clicked", G_CALLBACK(button11_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box3), button11);
+	glyphbox11 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button11), glyphbox11);
+	icon11 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon11), "./images/VolumeDown.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox11), icon11);
+
+	button12 = gtk_button_new();
+	g_signal_connect(GTK_BUTTON(button12), "clicked", G_CALLBACK(button12_clicked), (void*)&c);
+	gtk_container_add(GTK_CONTAINER(button_box3), button12);
+	glyphbox12 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+	gtk_container_add(GTK_CONTAINER(button12), glyphbox12);
+	icon12 = gtk_image_new();
+	gtk_image_set_from_file(GTK_IMAGE(icon12), "./images/VolumeUp.png");
+	gtk_container_add(GTK_CONTAINER(glyphbox12), icon12);
 
 	gtk_widget_show_all(window);
 

@@ -103,6 +103,7 @@ GtkWidget *icon28_2;
 GtkWidget *button29;
 GtkWidget *glyphbox29;
 GtkWidget *icon29;
+GtkWidget *entry1;
 GtkWidget *button30;
 GtkWidget *glyphbox30;
 GtkWidget *icon30;
@@ -250,6 +251,7 @@ typedef struct
 	messagequeue rq, tq;
 	pthread_t rtid[2], ttid[2];
 	int rret[2], tret[2];
+	char data[30];
 }cp2102;
 
 // Message Queue
@@ -1160,7 +1162,9 @@ static void button30_clicked(GtkWidget *button, gpointer data)
 	cp2102 *c = (cp2102 *)data;
 	token t;
 
-	fill_tx_token(&t, "CW", "");
+	const gchar *s = gtk_entry_get_text(GTK_ENTRY(entry1));
+	strcpy(c->data, s);
+	fill_tx_token(&t, "CW", c->data);
 	q_add(&(c->tq), &t);
 }
 
@@ -1349,6 +1353,7 @@ int main(int argc, char **argv)
 
 	button1 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button1), "clicked", G_CALLBACK(button1_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button1, "Enter pairing (2 min.)");
 	gtk_container_add(GTK_CONTAINER(button_box1), button1);
 	glyphbox1 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button1), glyphbox1);
@@ -1358,6 +1363,7 @@ int main(int argc, char **argv)
 
 	button13 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button13), "clicked", G_CALLBACK(button13_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button13, "Exit pairing");
 	gtk_container_add(GTK_CONTAINER(button_box1), button13);
 	glyphbox13 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button13), glyphbox13);
@@ -1367,6 +1373,7 @@ int main(int argc, char **argv)
 
 	button14 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button14), "clicked", G_CALLBACK(button14_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button14, "Connect last");
 	gtk_container_add(GTK_CONTAINER(button_box1), button14);
 	glyphbox14 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button14), glyphbox14);
@@ -1376,6 +1383,7 @@ int main(int argc, char **argv)
 
 	button15 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button15), "clicked", G_CALLBACK(button15_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button15, "Disconnect");
 	gtk_container_add(GTK_CONTAINER(button_box1), button15);
 	glyphbox15 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button15), glyphbox15);
@@ -1391,6 +1399,7 @@ int main(int argc, char **argv)
 
 	button18 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button18), "clicked", G_CALLBACK(button18_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button18, "Answer call");
 	gtk_container_add(GTK_CONTAINER(button_box4), button18);
 	glyphbox18 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button18), glyphbox18);
@@ -1400,6 +1409,7 @@ int main(int argc, char **argv)
 
 	button19 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button19), "clicked", G_CALLBACK(button19_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button19, "Reject call");
 	gtk_container_add(GTK_CONTAINER(button_box4), button19);
 	glyphbox19 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button19), glyphbox19);
@@ -1409,6 +1419,7 @@ int main(int argc, char **argv)
 
 	button20 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button20), "clicked", G_CALLBACK(button20_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button20, "End call");
 	gtk_container_add(GTK_CONTAINER(button_box4), button20);
 	glyphbox20 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button20), glyphbox20);
@@ -1418,6 +1429,7 @@ int main(int argc, char **argv)
 
 	button26 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button26), "clicked", G_CALLBACK(button26_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button26, "Release active, reject waiting");
 	gtk_container_add(GTK_CONTAINER(button_box4), button26);
 	glyphbox26 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button26), glyphbox26);
@@ -1430,6 +1442,7 @@ int main(int argc, char **argv)
 
 	button27 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button27), "clicked", G_CALLBACK(button27_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button27, "Release active, accept waiting");
 	gtk_container_add(GTK_CONTAINER(button_box4), button27);
 	glyphbox27 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button27), glyphbox27);
@@ -1442,6 +1455,7 @@ int main(int argc, char **argv)
 
 	button28 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button28), "clicked", G_CALLBACK(button28_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button28, "Hold active, accept waiting");
 	gtk_container_add(GTK_CONTAINER(button_box4), button28);
 	glyphbox28 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button28), glyphbox28);
@@ -1454,6 +1468,7 @@ int main(int argc, char **argv)
 
 	button29 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button29), "clicked", G_CALLBACK(button29_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button29, "Conference call");
 	gtk_container_add(GTK_CONTAINER(button_box4), button29);
 	glyphbox29 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button29), glyphbox29);
@@ -1469,6 +1484,7 @@ int main(int argc, char **argv)
 
 	button21 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button21), "clicked", G_CALLBACK(button21_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button21, "Redial");
 	gtk_container_add(GTK_CONTAINER(button_box5), button21);
 	glyphbox21 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button21), glyphbox21);
@@ -1478,6 +1494,7 @@ int main(int argc, char **argv)
 
 	button22 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button22), "clicked", G_CALLBACK(button22_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button22, "Voice dial");
 	gtk_container_add(GTK_CONTAINER(button_box5), button22);
 	glyphbox22 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button22), glyphbox22);
@@ -1487,6 +1504,7 @@ int main(int argc, char **argv)
 
 	button23 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button23), "clicked", G_CALLBACK(button23_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button23, "Cancel voice dial");
 	gtk_container_add(GTK_CONTAINER(button_box5), button23);
 	glyphbox23 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button23), glyphbox23);
@@ -1494,8 +1512,14 @@ int main(int argc, char **argv)
 	gtk_image_set_from_file(GTK_IMAGE(icon23), "./images/CancelVoiceDial.png");
 	gtk_container_add(GTK_CONTAINER(glyphbox23), icon23);
 
+	entry1 = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry1), sizeof(c.data)-1);
+	gtk_widget_set_tooltip_text(entry1, "Phone number");
+	gtk_container_add(GTK_CONTAINER(button_box5), entry1);
+
 	button30 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button30), "clicked", G_CALLBACK(button30_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button30, "Dial");
 	gtk_container_add(GTK_CONTAINER(button_box5), button30);
 	glyphbox30 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button30), glyphbox30);
@@ -1511,6 +1535,7 @@ int main(int argc, char **argv)
 
 	button24 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button24), "clicked", G_CALLBACK(button24_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button24, "Mute / Unmute");
 	gtk_container_add(GTK_CONTAINER(button_box6), button24);
 	glyphbox24 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button24), glyphbox24);
@@ -1520,6 +1545,7 @@ int main(int argc, char **argv)
 
 	button25 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button25), "clicked", G_CALLBACK(button25_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button25, "Toggle phone / headset");
 	gtk_container_add(GTK_CONTAINER(button_box6), button25);
 	glyphbox25 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button25), glyphbox25);
@@ -1529,6 +1555,7 @@ int main(int argc, char **argv)
 
 	button43 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button43), "clicked", G_CALLBACK(button43_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button43, "Query status");
 	gtk_container_add(GTK_CONTAINER(button_box1), button43);
 	glyphbox43 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button43), glyphbox43);
@@ -1661,6 +1688,7 @@ int main(int argc, char **argv)
 
 	button2 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button2), "clicked", G_CALLBACK(button2_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button2, "Play / Pause");
 	gtk_container_add(GTK_CONTAINER(button_box2), button2);
 	glyphbox2 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button2), glyphbox2);
@@ -1672,6 +1700,7 @@ int main(int argc, char **argv)
 
 	button3 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button3), "clicked", G_CALLBACK(button3_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button3, "Stop");
 	gtk_container_add(GTK_CONTAINER(button_box2), button3);
 	glyphbox3 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button3), glyphbox3);
@@ -1681,6 +1710,7 @@ int main(int argc, char **argv)
 
 	button4 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button4), "clicked", G_CALLBACK(button4_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button4, "Next");
 	gtk_container_add(GTK_CONTAINER(button_box2), button4);
 	glyphbox4 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button4), glyphbox4);
@@ -1690,6 +1720,7 @@ int main(int argc, char **argv)
 
 	button5 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button5), "clicked", G_CALLBACK(button5_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button5, "Previous");
 	gtk_container_add(GTK_CONTAINER(button_box2), button5);
 	glyphbox5 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button5), glyphbox5);
@@ -1699,6 +1730,7 @@ int main(int argc, char **argv)
 
 	button6 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button6), "clicked", G_CALLBACK(button6_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button6, "Fast forward");
 	gtk_container_add(GTK_CONTAINER(button_box2), button6);
 	glyphbox6 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button6), glyphbox6);
@@ -1708,6 +1740,7 @@ int main(int argc, char **argv)
 
 	button7 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button7), "clicked", G_CALLBACK(button7_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button7, "Fast rewind");
 	gtk_container_add(GTK_CONTAINER(button_box2), button7);
 	glyphbox7 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button7), glyphbox7);
@@ -1717,6 +1750,7 @@ int main(int argc, char **argv)
 
 	button8 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button8), "clicked", G_CALLBACK(button8_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button8, "FF / FR stop");
 	gtk_container_add(GTK_CONTAINER(button_box2), button8);
 	glyphbox8 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button8), glyphbox8);
@@ -1735,6 +1769,7 @@ int main(int argc, char **argv)
 
 	button16 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button16), "clicked", G_CALLBACK(button16_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button16, "Connect");
 	gtk_container_add(GTK_CONTAINER(button_box3), button16);
 	glyphbox16 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button16), glyphbox16);
@@ -1744,6 +1779,7 @@ int main(int argc, char **argv)
 
 	button17 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button17), "clicked", G_CALLBACK(button17_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button17, "Disconnect");
 	gtk_container_add(GTK_CONTAINER(button_box3), button17);
 	glyphbox17 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button17), glyphbox17);
@@ -1753,6 +1789,7 @@ int main(int argc, char **argv)
 
 	button9 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button9), "clicked", G_CALLBACK(button9_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button9, "Query status");
 	gtk_container_add(GTK_CONTAINER(button_box3), button9);
 	glyphbox9 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button9), glyphbox9);
@@ -1762,6 +1799,7 @@ int main(int argc, char **argv)
 
 	button10 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button10), "clicked", G_CALLBACK(button10_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button10, "Switch devices");
 	gtk_container_add(GTK_CONTAINER(button_box3), button10);
 	glyphbox10 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button10), glyphbox10);
@@ -1771,6 +1809,7 @@ int main(int argc, char **argv)
 
 	button11 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button11), "clicked", G_CALLBACK(button11_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button11, "Volume down");
 	gtk_container_add(GTK_CONTAINER(button_box3), button11);
 	glyphbox11 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button11), glyphbox11);
@@ -1780,6 +1819,7 @@ int main(int argc, char **argv)
 
 	button12 = gtk_button_new();
 	g_signal_connect(GTK_BUTTON(button12), "clicked", G_CALLBACK(button12_clicked), (void*)&c);
+	gtk_widget_set_tooltip_text(button12, "Volume up");
 	gtk_container_add(GTK_CONTAINER(button_box3), button12);
 	glyphbox12 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add(GTK_CONTAINER(button12), glyphbox12);
